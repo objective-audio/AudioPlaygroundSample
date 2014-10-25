@@ -17,7 +17,20 @@ let url: NSURL! = NSURL(fileURLWithPath: path!)
 let urls: [NSURL] = [url]
 samplerNode.loadAudioFilesAtURLs(urls, error: nil)
 
-audioEngine.connect(samplerNode, to: outputNode, format: format)
+let delayNode = AVAudioUnitDelay()
+audioEngine.attachNode(delayNode)
+delayNode.wetDryMix = 60
+delayNode.delayTime = 0.25
+delayNode.feedback = 60
+
+let reverbNode = AVAudioUnitReverb()
+audioEngine.attachNode(reverbNode)
+reverbNode.wetDryMix = 100
+reverbNode.loadFactoryPreset(.Plate)
+
+audioEngine.connect(samplerNode, to: delayNode, format: format)
+audioEngine.connect(delayNode, to: reverbNode, format: format)
+audioEngine.connect(reverbNode, to: outputNode, format: format)
 
 audioEngine.startAndReturnError(nil)
 
