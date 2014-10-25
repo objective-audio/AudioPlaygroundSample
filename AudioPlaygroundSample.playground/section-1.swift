@@ -1,5 +1,9 @@
 // Playground - noun: a place where people can play
 
 import Cocoa
+import AVFoundation
+import XCPlayground
 
-var str = "Hello, playground"
+XCPSetExecutionShouldContinueIndefinitely(continueIndefinitely: true)
+
+let audioEngine = AVAudioEngine()
